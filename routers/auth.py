@@ -54,6 +54,7 @@ async def login(
         })
     except Exception as e:
         # TODO: cuando hay un error el status da 200, no debería
+        print("Error:", e)
         return ResponseDTO(status="error", message="Tiene una sesión abierta", data=False)
 
 # @router.post("/register", summary="Registro de nuevo usuario")

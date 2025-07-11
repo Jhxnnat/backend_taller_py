@@ -5,18 +5,20 @@ from settings.ResponseDTO import ResponseDTO
 from settings.auth import get_current_user
 from settings.database import get_session
 
+# NOTE: ¿debería hacerce con el router auth.py?
+
 router = APIRouter(
     prefix="/usuarios",
     tags=["Usuario"],
-    dependencies=[Depends(get_current_user)]
+    # dependencies=[Depends(get_current_user)]
 )
 
-@router.post("/agregar")
-def create(item: Usuario, session: Session = Depends(get_session)):
-    session.add(item)
-    session.commit()
-    session.refresh(item)
-    return ResponseDTO(status="success", message="nuevo usuario agregado correctamente", date=item)
+# @router.post("/agregar")
+# def create(item: Usuario, session: Session = Depends(get_session)):
+#     session.add(item)
+#     session.commit()
+#     session.refresh(item)
+#     return ResponseDTO(status="success", message="nuevo usuario agregado correctamente", date=item)
 
 # @router.get("/listar")
 # def get_all(session: Session = Depends(get_session)):
