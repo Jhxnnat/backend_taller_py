@@ -1,4 +1,4 @@
-### backend sencillo para un taller mecánico.
+### backend para un taller mecánico.
 
 Uso:
 * tener un archivo .env con la url de la base de datos configurada (DATABASE_URL="mssql+pyodbc://USUARIO:CONTRASEÑA@nodossolutions.com:PUERTO/NOMBRE_BASE_DE_DADOS?driver=ODBC+Driver+17+for+SQL+Server").
