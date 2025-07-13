@@ -3,6 +3,9 @@ from sqlalchemy import ForeignKey, String
 from typing import Optional, List
 from datetime import datetime
 
+# TODO: algunos id deberian ser 'autoincrement'
+# para que no se tengan que manejar en la API
+
 class Cliente(SQLModel, table=True):
     idCliente: int = Field(default=None, primary_key=True)
     nombre: str = Field(max_length=50, nullable=False)
