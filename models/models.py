@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Column, Field, Relationship
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, Integer
 from typing import Optional, List
 from datetime import datetime
 
@@ -68,7 +68,8 @@ class Factura(SQLModel, table=True):
     servicio: Servicio = Relationship()
 
 class Usuario(SQLModel, table=True):
-    idUsuario: str = Field(sa_column=Column(String(50), primary_key=True))
+    idUsuario: int = Field(default=None, sa_column=Column(Integer, primary_key=True, autoincrement=True))
+    # idUsuario: str = Field(sa_column=Column(String(50), primary_key=True))
     username: str
     password: str
     email: str
@@ -85,7 +86,7 @@ class RefreshToken(SQLModel, table=True):
     token: str
     expiryDate: datetime
 
-    usuario_id_usuario: str = Field(sa_column=Column(String(50), ForeignKey("usuario.idUsuario"), unique=True))
+    usuario_id_usuario: int = Field(sa_column=Column(Integer, ForeignKey("usuario.idUsuario"), unique=True))
 
     # Relación uno a uno con Usuario
     usuario: "Usuario" = Relationship(back_populates="refresh_token")

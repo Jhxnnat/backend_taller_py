@@ -2,15 +2,21 @@
 
 Sistema Integrador en el Manejo y control de la informacion relevante de un taller mecanico para mejorar los procesos.
 
+## Dependencias (pip)
+- fastapi
+- uvicorn
+- python-jose
+- sqlmodel
+
 ### Uso:
-* Configurar una variable de entorno para la base de datos (DATABASE_URL="mssql+pyodbc://USUARIO:CONTRASEÑA@nodossolutions.com:1435/gestion_taller?driver=ODBC+Driver+17+for+SQL+Server").
-* Crear un entorno virtual para no tener las dependencias instaladas en el sistema.
-* `pip install -r requirements.txt`.
-* Ejecutar con: `uvicorn main:app --reload`.
-* En linux puede que se deba instalar algún paquete para poder conectarse a SQLServer (unixodbc).
+- Crea un archivo llamado ".env" que contenga lo siguiente:
+    - DATABASE_URL="mssql+pyodbc://USUARIO:CONTRASEÑA@nodossolutions.com:1435/gestion_taller?driver=ODBC+Driver+17+for+SQL+Server".
+- Crea un entorno virtual y activalo para no tener las dependencias instaladas en el sistema.
+- Ejecutar con: `python main.py`.
+- Puede que se deba instalar algún paquete/controlador para poder conectarse a SQLServer, busca unixodbc para linux o [aquí](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver17#version-17) para windows.
 
 ### En trabajo, por completar:
 - [ ] La autenticación no está completada.
 - [ ] Los modelos deberían estar en diferentes archivos para mejor organización.
 - [ ] Hay algo de código repetido.
-- [ ] Configurar los id de las tablas para que no sean modificables desde la API.
+- [ ] Configurar los id de las tablas como auntoincrementales.

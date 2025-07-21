@@ -11,7 +11,6 @@ from settings.database import get_session
 SECRET_KEY = "secret-jwt-key"
 ALGORITHM = "HS256"
 
-#oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 security = HTTPBearer()
 
 # Crear token con iat y exp
@@ -21,6 +20,22 @@ def create_token(data: dict, expires_delta: timedelta):
     to_encode["iat"] = int(now_utc.timestamp())
     to_encode["exp"] = int((now_utc + expires_delta).timestamp())
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def decode_token(token: str):
+    try:
+        # Decode the token using the secret key and algorithm
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        
+        # Check if the token is expired
+        if 'exp' in payload and datetime.utcfromtimestamp(payload['exp']) < datetime.utcnow():
+            raise HTTPException(status_code=401, detail="Token expirado")
+
+        return payload  # Return the decoded payload if valid
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expirado")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token inválido")
 
 # Verificar token y obtener usuario
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security),
@@ -39,4 +54,3 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         return username
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
-

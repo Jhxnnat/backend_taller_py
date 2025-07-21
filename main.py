@@ -1,16 +1,16 @@
 from fastapi import FastAPI
+import uvicorn
 from models.models import SQLModel
 from settings.database import engine
 
-from routers.cliente import router as cliente_router
-from routers.vehiculo import router as vehiculo_router
-from routers.servicio import router as servicio_router
-from routers.mecanico import router as mecanico_router
-from routers.factura import router as factura_router
-from routers.servicio_mecanico import router as servicio_mecanico_router
-from routers.usuario import router as usuario_router
-
-from routers.auth import router as auth_router
+from routers import cliente
+from routers import vehiculo
+from routers import servicio
+from routers import mecanico
+from routers import factura
+from routers import servicio_mecanico
+from routers import usuario
+from routers import auth
 
 tags_metadata = [
     { "name": "Cliente", "description": "Permite gestionar los clientes" },
@@ -19,26 +19,37 @@ tags_metadata = [
     { "name": "Mecanico", "description": "Permite gestión de los mecánicos del taller" },
     { "name": "Factura", "description": "Permite gestión de las facturas del taller" },
     { "name": "ServicioMecanico", "description": "Permite gestión de asignaciones de los mecanicos a los servicios" },
-    { "name": "Usuario", "description": "Permite gestión de los usuarios (administradores) del taller" },
+    # { "name": "Usuario", "description": "Permite gestión de los usuarios (administradores) del taller" },
     { "name": "Autenticación", "description": "Permite gestión de usuarios y sesiones" }
 ]
 
-app = FastAPI(
-    title="API Gestión de Taller Mecánico",
-    description="Documentación de la API para administracion de vehiculos y usuarios",
-    version="1.0.1",
-    openapi_tags=tags_metadata,
-)
+def get_application():
+    _app = FastAPI(
+        title="API Gestión de Taller Mecánico",
+        description="Documentación de la API para administracion de vehiculos y usuarios",
+        version="1.0.1",
+        openapi_tags=tags_metadata,
+    )
+    _app.include_router(auth.router)
+    _app.include_router(cliente.router)
+    _app.include_router(vehiculo.router)
+    _app.include_router(servicio.router)
+    _app.include_router(mecanico.router)
+    _app.include_router(factura.router)
+    _app.include_router(servicio_mecanico.router)
+    # _app.include_router(usuario.router)
+    return _app
 
-# crea las tablas en la base de datos
-SQLModel.metadata.create_all(engine)
+app = get_application()
 
-# incluir cada router por separado
-app.include_router(cliente_router)
-app.include_router(vehiculo_router)
-app.include_router(servicio_router)
-app.include_router(mecanico_router)
-app.include_router(factura_router)
-app.include_router(servicio_mecanico_router)
-app.include_router(usuario_router)
-app.include_router(auth_router)
+@app.get("/")
+def test_connection():
+    return {"status": "ok"}
+
+def main():
+    SQLModel.metadata.create_all(engine)
+    uvicorn.run("main:app", reload=True)
+
+if __name__ == "__main__":
+    main()
+

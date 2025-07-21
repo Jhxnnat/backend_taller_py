@@ -1,11 +1,13 @@
-import hashlib
+import bcrypt
 
-class PasswordUtils:
-    @staticmethod
-    def hash_password(password: str) -> str:
-        """
-        Genera un hash SHA-256 en formato hexadecimal para una contraseña.
-        """
-        sha256 = hashlib.sha256()
-        sha256.update(password.encode('utf-8'))
-        return sha256.hexdigest()
+# TODO: documentación de funciones
+def get_password_hash(password: str) -> str:
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+
+
