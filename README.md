@@ -16,7 +16,6 @@ Sistema Integrador en el Manejo y control de la informacion relevante de un tall
 - Puede que se deba instalar algún paquete/controlador para poder conectarse a SQLServer, busca unixodbc para linux o [aquí](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver17#version-17) para windows.
 
 ### En trabajo, por completar:
-- [ ] La autenticación no está completada.
 - [ ] Los modelos deberían estar en diferentes archivos para mejor organización.
 - [ ] Hay algo de código repetido.
-- [ ] Configurar los id de las tablas como auntoincrementales.
+- [ ] Configurar los id de ciertas tablas como auntoincrementales.
