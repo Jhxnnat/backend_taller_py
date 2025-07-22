@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from models.models import Cliente
+from models.models import Cliente, ClienteCrear
 from settings.ResponseDTO import ResponseDTO
 from settings.auth import get_current_user
 from settings.database import get_session
@@ -12,7 +12,8 @@ router = APIRouter(
 )
 
 @router.post("/agregar")
-def create(item: Cliente, session: Session = Depends(get_session)):
+def create(item: ClienteCrear, session: Session = Depends(get_session)):
+    _cliente = Cliente(**item.dict())
     session.add(item)
     session.commit()
     session.refresh(item)

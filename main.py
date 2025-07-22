@@ -30,7 +30,6 @@ def get_application():
         version="1.0.1",
         openapi_tags=tags_metadata,
     )
-    _app.include_router(auth.router)
     _app.include_router(cliente.router)
     _app.include_router(vehiculo.router)
     _app.include_router(servicio.router)
@@ -38,6 +37,7 @@ def get_application():
     _app.include_router(factura.router)
     _app.include_router(servicio_mecanico.router)
     # _app.include_router(usuario.router)
+    _app.include_router(auth.router)
     return _app
 
 app = get_application()

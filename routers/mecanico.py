@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from models.models import Mecanico
+from models.models import Mecanico, MecanicoCrear
 from settings.ResponseDTO import ResponseDTO
 from settings.auth import get_current_user
 from settings.database import get_session
@@ -8,11 +8,12 @@ from settings.database import get_session
 router = APIRouter(
     prefix="/mecanico",
     tags=["Mecanico"],
-    # dependencies=[Depends(get_current_user)]
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/agregar")
-def create(item: Mecanico, session: Session = Depends(get_session)):
+def create(item: MecanicoCrear, session: Session = Depends(get_session)):
+    _mecanico = Mecanico(**item.dict())
     session.add(item)
     session.commit()
     session.refresh(item)
