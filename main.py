@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from models.models import SQLModel
 from settings.database import engine
@@ -38,6 +39,22 @@ def get_application():
     _app.include_router(servicio_mecanico.router)
     # _app.include_router(usuario.router)
     _app.include_router(auth.router)
+
+    origins = [
+        "http://localhost",
+        "http://localhost:8080",
+        "http://localhost:8000",
+        "http://localhost:4200"
+    ]
+
+    _app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
     return _app
 
 app = get_application()

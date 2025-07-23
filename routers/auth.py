@@ -32,8 +32,11 @@ async def login(
 
         if not usuario or not verify_password(password, usuario.password):
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
-        # if not usuario or usuario.password != password:
-        #     raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
+        existing_token = session.exec(select(RefreshToken).where(RefreshToken.usuario_id_usuario == usuario.idUsuario)).first()
+        if existing_token:
+           session.delete(existing_token)
+           session.commit()
 
         access_token = create_token({
             "sub": username,
