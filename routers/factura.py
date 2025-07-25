@@ -14,10 +14,10 @@ router = APIRouter(
 @router.post("/agregar")
 def create(item: FacturaCrear, session: Session = Depends(get_session)):
     _factura = Factura(**item.dict())
-    session.add(item)
+    session.add(_factura)
     session.commit()
-    session.refresh(item)
-    return ResponseDTO(status="success", message="factura agregada correctamente", date=item)
+    session.refresh(_factura)
+    return ResponseDTO(status="success", message="factura agregada correctamente", data=_factura)
 
 @router.get("/listar")
 def get_all(session: Session = Depends(get_session)):

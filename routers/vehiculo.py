@@ -8,16 +8,16 @@ from settings.database import get_session
 router = APIRouter(
     prefix="/vehiculo",
     tags=["Vehiculo"],
-    dependencies=[Depends(get_current_user)]
+    # dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/agregar")
 def create(item: VehiculoCrear, session: Session = Depends(get_session)):
     _vehiculo = Vehiculo(**item.dict())
-    session.add(item)
+    session.add(_vehiculo)
     session.commit()
-    session.refresh(item)
-    return ResponseDTO(status="success", message="vehiculo agregado correctamente", date=item)
+    session.refresh(_vehiculo)
+    return ResponseDTO(status="success", message="vehiculo agregado correctamente", data=_vehiculo)
 
 @router.get("/listar")
 def get_all(session: Session = Depends(get_session)):

@@ -15,7 +15,7 @@ def create(item: Usuario, session: Session = Depends(get_session)):
     session.add(item)
     session.commit()
     session.refresh(item)
-    return ResponseDTO(status="success", message="nuevo usuario agregado correctamente", date=item)
+    return ResponseDTO(status="success", message="nuevo usuario agregado correctamente", data=item)
 
 @router.get("/listar")
 def get_all(session: Session = Depends(get_session)):

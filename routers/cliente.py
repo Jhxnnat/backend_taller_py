@@ -14,10 +14,10 @@ router = APIRouter(
 @router.post("/agregar")
 def create(item: ClienteCrear, session: Session = Depends(get_session)):
     _cliente = Cliente(**item.dict())
-    session.add(item)
+    session.add(_cliente)
     session.commit()
-    session.refresh(item)
-    return ResponseDTO(status="success", message="cliente agregado correctamente", date=item)
+    session.refresh(_cliente)
+    return ResponseDTO(status="success", message="cliente agregado correctamente", data=_cliente)
 
 @router.get("/listar")
 def get_all(session: Session = Depends(get_session)):

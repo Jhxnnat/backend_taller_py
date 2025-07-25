@@ -14,10 +14,10 @@ router = APIRouter(
 @router.post("/agregar")
 def create(item: MecanicoCrear, session: Session = Depends(get_session)):
     _mecanico = Mecanico(**item.dict())
-    session.add(item)
+    session.add(_mecanico)
     session.commit()
-    session.refresh(item)
-    return ResponseDTO(status="success", message="mecanico agregado correctamente", date=item)
+    session.refresh(_mecanico)
+    return ResponseDTO(status="success", message="mecanico agregado correctamente", data=_mecanico)
 
 @router.get("/listar")
 def get_all(session: Session = Depends(get_session)):
