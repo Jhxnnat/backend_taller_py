@@ -44,7 +44,7 @@ class Servicio(SQLModel, table=True):
     # idServicio: int = Field(default=None, primary_key=True)
     idServicio: int = Field(default=None, sa_column=Column(Integer, primary_key=True, autoincrement=True))
     descripcion: str = Field(max_length=250, nullable=False)
-    fecharegistro: datetime = Field(nullable=False)
+    fecharegistro: int = Field(nullable=False)
     estado: Optional[str] = Field(max_length=50)
     idVehiculo: int = Field(foreign_key="vehiculo.idVehiculo", nullable=False)
 

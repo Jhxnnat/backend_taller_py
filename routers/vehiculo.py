@@ -30,6 +30,13 @@ def get(id: str, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Registro no encontrado")
     return ResponseDTO(status="success", message="", data=item)
 
+@router.get("/consultar_cliente/{id}")
+def get(id: str, session: Session = Depends(get_session)):
+    item = session.exec(select(Vehiculo).where(Vehiculo.idCliente == id))
+    if not item:
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
+    return ResponseDTO(status="success", message="", data=item)
+
 @router.put("/actualizar/{id}")
 def update(id: str, updated: Vehiculo, session: Session = Depends(get_session)):
     item = session.get(Vehiculo, id)

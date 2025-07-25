@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from models.models import Cliente, ClienteCrear
+from sqlalchemy.orm import selectinload
+from typing import List
+from models.models import Cliente, ClienteCrear, Vehiculo
 from settings.ResponseDTO import ResponseDTO
 from settings.auth import get_current_user
 from settings.database import get_session
@@ -8,7 +10,7 @@ from settings.database import get_session
 router = APIRouter(
     prefix="/clientes",
     tags=["Cliente"],
-    dependencies=[Depends(get_current_user)]
+    # dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/agregar")
@@ -31,7 +33,7 @@ def get(id: str, session: Session = Depends(get_session)):
     return ResponseDTO(status="success", message="", data=item)
 
 @router.put("/actualizar/{id}")
-def update(id: str, updated: Cliente, session: Session = Depends(get_session)):
+def update(id: str, updated: ClienteCrear, session: Session = Depends(get_session)):
     item = session.get(Cliente, id)
     if not item:
         raise HTTPException(status_code=404, detail="Registro no encontrado")
@@ -50,4 +52,21 @@ def delete(id: str, session: Session = Depends(get_session)):
     session.commit()
     return ResponseDTO(status="success", message="", data=True) 
 
+@router.delete("/eliminar_completo/{id}") # elimina vehiculos y servicios
+def delete(id: str, session: Session = Depends(get_session)):
+
+    #TODO: delete servicios too
+
+    vehiculos = session.exec(select(Vehiculo).where(Vehiculo.idCliente == id)).all()
+    if not vehiculos:
+        raise HTTPException(status_code=404, detail="Cliente sin Vehiculo asociado")
+    for v in vehiculos:
+        session.delete(v)
+
+    cliente = session.get(Cliente, id)
+    if not cliente:
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
+    session.delete(cliente)
+    session.commit()
+    return ResponseDTO(status="success", message="", data=True) 
 
