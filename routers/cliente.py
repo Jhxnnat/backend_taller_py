@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from sqlalchemy.orm import selectinload
 from typing import List
-from models.models import Cliente, ClienteCrear, Vehiculo
+from models.models import Cliente, ClienteCrear, Vehiculo, Servicio
 from settings.ResponseDTO import ResponseDTO
 from settings.auth import get_current_user
 from settings.database import get_session
@@ -54,14 +54,16 @@ def delete(id: str, session: Session = Depends(get_session)):
 
 @router.delete("/eliminar_completo/{id}") # elimina vehiculos y servicios
 def delete(id: str, session: Session = Depends(get_session)):
-
-    #TODO: delete servicios too
-
     vehiculos = session.exec(select(Vehiculo).where(Vehiculo.idCliente == id)).all()
     if not vehiculos:
         raise HTTPException(status_code=404, detail="Cliente sin Vehiculo asociado")
     for v in vehiculos:
+        servicio = session.exec(select(Servicio).where(Servicio.idVehiculo == v.idVehiculo))
+        if (servicio):
+            session.delete(servicio)
+        # borrar vehiculo
         session.delete(v)
+
 
     cliente = session.get(Cliente, id)
     if not cliente:

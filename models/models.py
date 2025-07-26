@@ -53,7 +53,7 @@ class Servicio(SQLModel, table=True):
 
 class ServicioCrear(SQLModel):
     descripcion: str = Field(max_length=250, nullable=False)
-    fecharegistro: datetime = Field(nullable=False)
+    fecharegistro: int = Field(nullable=False)
     estado: Optional[str] = Field(max_length=50)
     idVehiculo: int = Field(foreign_key="vehiculo.idVehiculo", nullable=False)
 

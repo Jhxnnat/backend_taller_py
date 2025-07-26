@@ -8,7 +8,7 @@ from settings.database import get_session
 router = APIRouter(
     prefix="/mecanico",
     tags=["Mecanico"],
-    dependencies=[Depends(get_current_user)]
+    # dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/agregar")
